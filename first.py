@@ -73,9 +73,14 @@ def new():
     p=request.form['password']
     return "username is %s" %u +"password is %s"%p
     
+# get method case
 
-
-
+@app.route("/postdata1",methods=['GET'])
+def new1():
+    u=request.args.get('username')
+    p=request.args.get('password')
+    return f"username is {u},password is {p}"
+    
 
 
 
