@@ -77,15 +77,65 @@ def new():
 
 @app.route("/postdata1",methods=['GET'])
 def new1():
-    u=request.args.get('username')
-    p=request.args.get('password')
+    u=request.args('username')
+    p=request.args('password')
     return f"username is {u},password is {p}"
     
 
+# to pass html page
+@app.route("/first")
+def first():
+    return render_template("first.html")
 
 
+# to pass values html page
+@app.route("/sec")
+def sec():
+    a="flask"
+    b=[10,20,30,40,50]
+    c=""
+    return render_template("first.html",data=a,value=b,view=c)
+
+# multiplication table
+@app.route("/mul/<int:num>")
+def mul(num):
+    a=num
+    return render_template("mul.html",data=a)
 
 
+@app.route("/tem")
+def tem():
+    return render_template("new.html")
+
+#form pasing case
+@app.route("/form")
+def form():
+    return render_template("form.html")
+    
+
+@app.route("/view",methods=['POST'])
+def view():
+    f=request.form['fname']
+    l=request.form['lname']
+    a=request.form['age']
+    e=request.form['email']
+    p=request.form['phone']
+    return render_template("view.html",fname=f,lname=l,age=a,email=e,phone=p)
+
+
+#file passing case
+
+@app.route("/file")
+def file():
+    return render_template("file.html")
+
+
+@app.route("/viewfile",methods=['POST'])
+def viewfile():
+    if request.method=="POST":
+        f=request.files['file']
+        f.save(f.filename)
+        return "file successfuly saved"
 
 
 
