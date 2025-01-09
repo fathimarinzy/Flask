@@ -72,5 +72,113 @@ def getform():
         return make_response("datas inserted successfully")
 
 
+@app.route("/viewdata")
+def viewdata():
+    con=sqlite3.connect("student.db")
+    con.row_factory=sqlite3.Row
+    cursor1=con.cursor()
+    cursor1.execute("select * from student")
+    data=cursor1.fetchall()
+  
+    return render_template("viewstudent.html",view=data)
+
+
+# to view without rowfactor method
+# @app.route("/viewdata")
+# def viewdata():
+#     con=sqlite3.connect("student.db")
+#     cursor1=con.cursor()
+#     cursor1.execute("select * from student")
+#     data=cursor1.fetchall()
+#     for i in data:
+#         # print(i)
+#         # print(i[0])
+#         print(i['firstname'])
+#     return render_template("viewstudent.html",view=data)
+
+
+#to delete
+@app.route("/deletedata/<int:id>")
+def deletedata(id):
+    con=sqlite3.connect("student.db")
+    cursor1=con.cursor()
+    cursor1.execute(" delete from student where studid=%d"%id)
+    con.commit()
+    return make_response("datas deleted successfully")
+
+@app.route("/editdata/<int:id>")
+def editdata(id):
+    con=sqlite3.connect("student.db")
+    con.row_factory=sqlite3.Row
+    cursor1=con.cursor()
+    cursor1.execute("select * from student where studid=%d"%id)
+    data=cursor1.fetchone()
+    print(data)
+    return render_template("editstudent.html",view=data)
+
+#update
+@app.route("/update/<int:id>",methods=["POST"])
+def updatedata(id):
+    if request.method=="POST":
+        f=request.form['fname']
+        l=request.form['lname']
+        a=request.form['age']
+        e=request.form['email']
+        con=sqlite3.connect("student.db")
+        cursor1=con.cursor()
+        cursor1.execute("update student set firstname=?,lastname=?,age=?,email=? where studid=?",(f,l,a,e,id))
+        con.commit()
+        return make_response("updated successfully") 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__=="__main__":
     app.run(debug=True)
